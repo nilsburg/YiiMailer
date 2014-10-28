@@ -36,7 +36,8 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPMailer'.DIRECTORY_SEPARAT
 
 
 class YiiMailer extends PHPMailer {
-
+	public $keepCopy = false; //if you want to keep a copy after sending
+    	public $copyPrefix = "mail"; //prefix for the copy file
 	/**
 	 * Sets the CharSet of the message.
 	 * @var string
@@ -517,6 +518,8 @@ class YiiMailer extends PHPMailer {
 			//in test mode, save message as a file
 			if($this->testMode)
 				return $this->save();
+			elseif($this->keepCopy){
+                		if($this->save()) $this->PostSend();
 			else
 				return $this->PostSend();
 		} catch (phpmailerException $e) {
